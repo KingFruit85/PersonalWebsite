@@ -1,7 +1,6 @@
 <html>
   <head> 
     <title>Christopher Long - softwareDeveloper</title>
-    <!-- <canvas id="myCanvas" width="50" height="50"></canvas>           -->
 
 
     <style>
@@ -30,9 +29,10 @@
       }
 
       .grid-container {
-      display: grid;
+      display:grid;
       height: 100vh;
       grid-template-rows: 20% 60% 20%;
+      flex-direction: column;
       }
 
       #mainTitle 
@@ -43,8 +43,7 @@
         font-size:100px;
       }
 
-      #subTitle 
-      {
+      #subTitle{
         color: rgba(132, 194, 216, 1);
         font-family: 'Consolas';
         text-align: center;
@@ -52,101 +51,37 @@
         margin-top: 4%;
 
       }
+
       #centerContent{
-        align-self: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         line-height: 0px;
       }
 
       #myCanvas{
-        border-width: 2px 2px 2px 2px;
-        border-color: white;
-        border-style: solid;
+
+        position:absolute;
+        z-index: -1;
       }
 
     </style>
 
-    <!-- <script>
-      //returns a random colour as a hex value
-      function getRandomColor() {
-        var letters = "0123456789ABCDEF";
-        var color = "#";
-        for (var i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-      }
-      //Returns a random number between a range of the two arguments
-      //wrap the return value in Math.floor/ceil() for a whole number
-      function returnRandomNumberInRange(minValue, maxValue) {
-        if (
-          minValue > maxValue ||
-          minValue === undefined ||
-          maxValue === undefined
-        ) {
-          return "Unexpected arguments, please provide minimum and maximum values in that order";
-        } else {
-          return Math.random() * (maxValue - minValue + 1) + minValue;
-        }
-      }
-
-      //Assigns the canvas object to canvas so we can access it
-      const c = document.getElementById("myCanvas");
-      const canvas = c.getContext("2d");
-      canvas.lineWidth = 3.5;
-
-      //initialises the X/Y arrays
-      const xValues = [],
-            yValues = [];
-
-      //Sets the number of steps and grid locations into X&Y arrays
-      function plotPoints(centerX, centerY, steps) {
-        var randomRad1, randomRad2;
-        for (var i = 0; i < steps; i++) {
-          randomRad1 = returnRandomNumberInRange(200, 450);
-          randomRad2 = returnRandomNumberInRange(200, 450);
-          xValues[i] =
-            centerX + randomRad1 * Math.cos((2 * Math.PI * i) / steps);
-          yValues[i] =
-            centerY + randomRad2 * Math.sin((2 * Math.PI * i) / steps);
-        }
-      }
-      //Draws the shape
-      function drawShape(xPOS, yPOS) {
-        canvas.arc(500, 500, 450, 0, Math.PI * 2, true);
-        canvas.beginPath();
-        for (i = 0; i <= xPOS.length - 1; i++) {
-          canvas.moveTo(xPOS[i], yPOS[i]);
-          canvas.lineTo(xPOS[i + 1], yPOS[i + 1]);
-        }
-        canvas.moveTo(xPOS[xPOS.length], yPOS[yPOS.length]);
-        canvas.lineTo(xPOS[0], yPOS[0]);
-        canvas.closePath();
-        canvas.strokeStyle = getRandomColor();
-        canvas.stroke();
-      }
-
-      //Clears the screen ready for the next shape
-      function clearCanvas() {
-        canvas.clearRect(0, 0, myCanvas.width, myCanvas.height);
-        canvas.beginPath();
-      }
-    </script> -->
-
   </head>
 
   <body>
+    
 
     <div class ="grid-container">
             
       <div id = "head" >
-          <!-- <button onclick="clearCanvas();plotPoints(500, 500, 11);drawShape(xValues, yValues)">
-            Generate
-          </button> -->
       </div>
 
       <div id = "centerContent">
+        <canvas id="myCanvas" width="400" height="400"></canvas>          
         <div><h1 id = "mainTitle">christopherLong</h1></div>
-        <div><h2 id = "subTitle">softwareDeveloper</h2>    </div>     
+        <div><h2 id = "subTitle">softwareDeveloper</h2></div>     
       </div>
 
       <div id = "foot" >
@@ -164,6 +99,86 @@
         </a>
 
       </div>
-      
+
+
+      <script>
+
+        // Checks to see if the user would prefer we don't give them a seizure 
+        var slowMode = window.matchMedia('prefers-reduced-motion').matches;
+
+        //returns a random colour as a hex value
+        function getRandomColor() {
+          var letters = "0123456789ABCDEF";
+          var color = "#";
+          for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        }
+        //Returns a random number between a range of the two arguments
+        //wrap the return value in Math.floor/ceil() for a whole number
+        function returnRandomNumberInRange(minValue, maxValue) {
+          if (
+            minValue > maxValue ||
+            minValue === undefined ||
+            maxValue === undefined
+          ) {
+            return "Unexpected arguments, please provide minimum and maximum values in that order";
+          } else {
+            return Math.random() * (maxValue - minValue + 1) + minValue;
+          }
+        }
+  
+        //Assigns the canvas object to canvas so we can access it
+        const c = document.getElementById("myCanvas");
+        const canvas = c.getContext("2d");
+        canvas.lineWidth = 3.5;
+  
+        //initialses the X/Y arrays
+        const xValues = [],
+              yValues = [];
+
+        //Clears the screen ready for the next shape
+        function clearCanvas() {
+          canvas.clearRect(0, 0, myCanvas.width, myCanvas.height);
+          canvas.beginPath();
+        }
+
+        //Draws the shape
+        function drawShape(xPOS, yPOS) {
+          canvas.arc(500, 500, 450, 0, Math.PI * 2, true);
+          canvas.beginPath();
+          for (i = 0; i <= xPOS.length - 1; i++) {
+            canvas.moveTo(xPOS[i], yPOS[i]);
+            canvas.lineTo(xPOS[i + 1], yPOS[i + 1]);
+          }
+          canvas.moveTo(xPOS[xPOS.length], yPOS[yPOS.length]);
+          canvas.lineTo(xPOS[0], yPOS[0]);
+          canvas.closePath();
+          canvas.strokeStyle = getRandomColor();
+          canvas.stroke();
+        }
+  
+        //Sets the number of steps and grid locations into X&Y arrays
+        function plotPoints() {
+          clearCanvas();
+          var randomRad1, randomRad2;
+          for (var i = 0; i < 11; i++) {
+            randomRad1 = returnRandomNumberInRange(100, 200);
+            randomRad2 = returnRandomNumberInRange(100, 200);
+            xValues[i] =
+              200 + randomRad1 * Math.cos((2 * Math.PI * i) / 11);
+            yValues[i] =
+              200 + randomRad2 * Math.sin((2 * Math.PI * i) / 11);
+          }
+          drawShape(xValues, yValues)
+        }
+
+        if(slowMode) setInterval(plotPoints, 1000);
+        else setInterval(plotPoints, 200);
+
+
+      </script>
+      </div>
   </body>
 </html>
