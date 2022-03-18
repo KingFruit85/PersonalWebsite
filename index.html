@@ -5,7 +5,7 @@
     <meta name="description" content="Clever girl"/>
     <meta name="viewport" content="width=device-width">
     <title>Christopher Long - softwareDeveloper</title>
-
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
     <style>
       body {
@@ -13,38 +13,26 @@
         overflow: hidden; 
       }
       
-      #head{
-        display: flex;
-        background-color: rgba(40, 40, 40, 1);
-        border-width: 0px 0px 2px 0px;
-        border-color: white;
-        border-style: solid;
-        width: 100%;
-        height: 20vh;
-        flex-grow: 1;
-      }
-
       #centerContent{
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         line-height: 0px;
-        flex-grow: 1;
-        height: 60vh;
+        padding-top: 30vh;
       }
 
       #foot
       {
-        display:flex;
-        background-color: rgba(40, 40, 40, 1);
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(40, 40, 40, 0.5);
         border-width: 2px 0px 0px 0px;
         border-color: white;
         border-style: solid;
-        justify-content: center;
-        width: 100%;
-        height: 20vh;
-        min-height: 100vh;
+        text-align: center;
       }
 
       .grid-container 
@@ -56,7 +44,7 @@
       #mainTitle 
       {
         display:flex;
-
+        font-size:5vw;
         color: rgba(62, 193, 176, 1);
         font-family: 'Consolas';
         text-align: center;
@@ -64,6 +52,9 @@
       }
 
       #subTitle{
+        display: flex;
+        font-size:3vw;
+
         color: rgba(132, 194, 216, 1);
         font-family: 'Consolas';
         text-align: center;
@@ -72,25 +63,19 @@
 
       #myCanvas{
         display:flex;
+        width: 50%;
         position:absolute;
         z-index: -1;
       }
 
     </style>
-
   </head>
-
   <body>
-    
 
     <div class ="grid-container">
-            
-      <div id = "head" >
-        
-      </div>
 
       <div id = "centerContent">
-        <canvas id="myCanvas" width="400" height="400"></canvas>          
+        <canvas id="myCanvas"></canvas>          
         <div><h1 id = "mainTitle">christopherLong</h1></div>
         <div><h2 id = "subTitle">softwareDeveloper</h2></div>     
       </div>
@@ -115,13 +100,13 @@
       <script>
 
         // Checks to see if the user would prefer we don't give them a seizure 
-        var slowMode = window.matchMedia('(prefers-reduced-motion)').matches;
+        let slowMode = window.matchMedia('(prefers-reduced-motion)').matches;
 
         //returns a random colour as a hex value
         function getRandomColor() {
-          var letters = "0123456789ABCDEF";
-          var color = "#";
-          for (var i = 0; i < 6; i++) {
+          let letters = "0123456789ABCDEF";
+          let color = "#";
+          for (let i = 0; i < 6; i++) {
             color += letters[Math.floor(Math.random() * 16)];
           }
           return color;
@@ -130,9 +115,7 @@
         //wrap the return value in Math.floor/ceil() for a whole number
         function returnRandomNumberInRange(minValue, maxValue) {
           if (
-            minValue > maxValue ||
-            minValue === undefined ||
-            maxValue === undefined
+            minValue > maxValue || minValue === undefined || maxValue === undefined
           ) {
             return "Unexpected arguments, please provide minimum and maximum values in that order";
           } else {
@@ -141,53 +124,55 @@
         }
   
         //Assigns the canvas object to canvas so we can access it
-        const c = document.getElementById("myCanvas");
-        const canvas = c.getContext("2d");
-        canvas.lineWidth = 3.5;
+        let c = document.getElementById("myCanvas");
+        let canvas = c.getContext("2d");
+        canvas.lineWidth = 0.7;
+        let heightRatio = 1.5;
+        canvas.height = canvas.width * heightRatio;
   
         //initialses the X/Y arrays
-        const xValues = [],
-              yValues = [];
+        let xValues = [],
+            yValues = [];
 
         //Clears the screen ready for the next shape
         function clearCanvas() {
           canvas.clearRect(0, 0, myCanvas.width, myCanvas.height);
-          canvas.beginPath();
         }
 
         //Draws the shape
         function drawShape(xPOS, yPOS) {
-          canvas.arc(500, 500, 450, 0, Math.PI * 2, true);
+
+          canvas.strokeStyle = getRandomColor();
           canvas.beginPath();
-          for (i = 0; i <= xPOS.length - 1; i++) {
+
+          for (i = 0; i <= xPOS.length - 1; i++) 
+          {
             canvas.moveTo(xPOS[i], yPOS[i]);
             canvas.lineTo(xPOS[i + 1], yPOS[i + 1]);
           }
-          canvas.moveTo(xPOS[xPOS.length], yPOS[yPOS.length]);
+
           canvas.lineTo(xPOS[0], yPOS[0]);
-          canvas.closePath();
-          canvas.strokeStyle = getRandomColor();
           canvas.stroke();
         }
   
         //Sets the number of steps and grid locations into X&Y arrays
         function plotPoints() {
-          clearCanvas();
-          var randomRad1, randomRad2;
-          for (var i = 0; i < 11; i++) {
-            randomRad1 = returnRandomNumberInRange(50, 100); // Adjust for bigger shapes
-            randomRad2 = returnRandomNumberInRange(50, 100); // Adjust for bigger shapes
-            xValues[i] =
-              200 + randomRad1 * Math.cos((2 * Math.PI * i) / 11);
-            yValues[i] =
-              200 + randomRad2 * Math.sin((2 * Math.PI * i) / 11);
+          for (let i = 0; i < 11; i++) {
+            let randomRad1 = returnRandomNumberInRange(15, 70); // Adjust for bigger shapes
+            let randomRad2 = returnRandomNumberInRange(15, 70); // Adjust for bigger shapes
+            
+            // The first two values position the animation in the canvas
+            // The last two values define how many points to draw
+            xValues[i] = 150 + randomRad1 * Math.cos((2 * Math.PI * i) / 11);
+            yValues[i] =  80 + randomRad2 * Math.sin((2 * Math.PI * i) / 11);
           }
-          drawShape(xValues, yValues)
+          clearCanvas();
+          drawShape(xValues, yValues);
+          
         }
 
         if(slowMode) setInterval(plotPoints, 1000);
-        else setInterval(plotPoints, 200);
-
+        else setInterval(plotPoints, 150);
 
       </script>
 
